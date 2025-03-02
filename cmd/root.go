@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	// "encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -41,16 +42,13 @@ func Execute() {
 	}
 }
 
+var headers []string
+
+var data string
+
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.mavis.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+  rootCmd.Flags().StringVarP(&data, "data", "d", "", "Data to pass along with the request")
+  rootCmd.Flags().StringSliceVarP(&headers, "headers", "H", []string{}, "Headers to be sent with the query")
 }
 
 func mavisFetch(u, m string) (ret string, err error) {
@@ -62,15 +60,27 @@ func mavisFetch(u, m string) (ret string, err error) {
 		return "", errors.New("url can not be nil")
 	}
 
+  re := strings.NewReader(data)
+
 	mU := strings.ToUpper(m)
 
 	client := &http.Client{}
 
-	req, err := http.NewRequest(mU, u, nil)
+	req, err := http.NewRequest(mU, u, re)
 
 	if err != nil {
 		return "", errors.New(err.Error())
 	}
+
+  for _, h := range headers {
+    b, a, f := strings.Cut(h, ":")
+
+    if !f {
+      return "", errors.New("header format invalid")
+    }
+    
+    req.Header.Add(b, a)
+  }
 
   res, err := client.Do(req)
 
