@@ -10,6 +10,8 @@ import (
 	"path/filepath"
 	"strings"
 
+  scmd "mavis/cmd/stash"
+
 	"github.com/BurntSushi/toml"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/cobra"
@@ -56,6 +58,8 @@ func init() {
 	rootCmd.Flags().BoolVar(&stash, "stash", false, "Indicates the request should be stashed")
 	rootCmd.Flags().StringVarP(&name, "name", "n", "", "Name to stash the request as, can use slashes to denote directories")
   rootCmd.Flags().StringSliceVarP(&cookies, "cookie", "b", []string{}, "Cookie to send with the request, formatted as Cookie=Value")
+
+  rootCmd.AddCommand(scmd.StashCmd)
 }
 
 func validMethod(m string) bool {
@@ -106,9 +110,9 @@ func stashRequest(u, m, n, d string, h, c []string) error {
 		return errors.New("invalid file name")
 	}
 
-	dir := filepath.Join(os.Getenv("HOME"), ".mavis", *md)
+	dir := filepath.Join(os.Getenv("HOME"), ".mavis", "requests", *md)
 
-	err := os.MkdirAll(dir, 0666)
+	err := os.MkdirAll(dir, 0766)
 
 	if err != nil {
 		return err
