@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	// "encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -43,7 +42,6 @@ func Execute() {
 }
 
 var headers []string
-
 var data string
 
 func init() {
@@ -51,8 +49,34 @@ func init() {
   rootCmd.Flags().StringSliceVarP(&headers, "headers", "H", []string{}, "Headers to be sent with the query")
 }
 
+func validMethod(m string) bool {
+  vm := map[string]bool{
+    "get": true,
+    "head": true,
+    "post": true,
+    "put": true,
+    "patch": true,
+    "delete": true,
+    "trace": true,
+  }
+
+  _, ok := vm[m]
+
+  return ok
+}
+
+func fixScheme(u string) string {
+  _, _, f := strings.Cut(u, "://")
+
+  if !f {
+    return strings.Join([]string{"http://", u}, "")
+  }
+  
+  return u
+}
+
 func mavisFetch(u, m string) (ret string, err error) {
-	if !(m == "get" || m == "post") {
+  if ok := validMethod(m); !ok {
 		return "", errors.New("method not supported")
 	}
 
@@ -60,13 +84,15 @@ func mavisFetch(u, m string) (ret string, err error) {
 		return "", errors.New("url can not be nil")
 	}
 
+  uF := fixScheme(u)
+
   re := strings.NewReader(data)
 
 	mU := strings.ToUpper(m)
 
 	client := &http.Client{}
 
-	req, err := http.NewRequest(mU, u, re)
+	req, err := http.NewRequest(mU, uF, re)
 
 	if err != nil {
 		return "", errors.New(err.Error())
