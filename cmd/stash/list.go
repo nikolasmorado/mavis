@@ -22,6 +22,8 @@ var StashListCmd = &cobra.Command{
 	},
 }
 
+// TODO: Modify this to use a prefix sum or something
+
 func list(p string, d int, pl bool) {
 
 	fs, err := os.ReadDir(p)

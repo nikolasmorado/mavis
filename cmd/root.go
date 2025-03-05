@@ -103,7 +103,7 @@ func getFileName(n string) (*string, *string) {
 	return &dir, &nm
 }
 
-func stashRequest(u, m, n, d string, h, c []string) error {
+func stashRequest(m, u, n, d string, h, c []string) error {
 	md, fname := getFileName(n)
 
 	if fname == nil {
