@@ -193,6 +193,22 @@ func mavisFetch(u, m string) (string, error) {
 		req.Header.Add(b, a)
 	}
 
+  for _, c := range cookies {
+    b, a, f := strings.Cut(c, ":")
+
+    if !f {
+      return "", errors.New("cookie format invalid")
+    }
+
+    ck := &http.Cookie{
+      Name: b,
+      Value: a,
+    }
+
+    req.AddCookie(ck)
+  }
+
+
 	res, err := client.Do(req)
 
 	if err != nil {

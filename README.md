@@ -31,7 +31,7 @@ Use "mavis [command] --help" for more information about a command.
 - Optionally supply data with files
 - Support output to files instead of only stdout
 - Add picture or video of mavis playing fetch to the readme or something so people believe me
-- Make cookies work
+- ~~Make cookies work~~
 - ~~Running stashed requests~~
 - Add validation for re running requests
 - Prettier output when printing to cli not files
