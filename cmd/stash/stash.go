@@ -12,4 +12,5 @@ var StashCmd = &cobra.Command{
 func init() {
   StashCmd.AddCommand(StashListCmd)
   StashCmd.AddCommand(StashRunCmd)
+  StashCmd.AddCommand(StashRemoveCmd)
 }

@@ -128,7 +128,7 @@ func stashRequest(m, u, n, d string, h, c []string) error {
 
 	cm := make(map[string]string)
 	for _, ci := range c {
-		parts := strings.SplitN(ci, "=", 2)
+		parts := strings.SplitN(ci, ":", 2)
 		if len(parts) == 2 {
 			cm[strings.TrimSpace(parts[0])] = strings.TrimSpace(parts[1])
 		}
@@ -194,7 +194,7 @@ func mavisFetch(u, m string) (string, error) {
 	}
 
   for _, c := range cookies {
-    b, a, f := strings.Cut(c, ":")
+    b, a, f := strings.Cut(c, "=")
 
     if !f {
       return "", errors.New("cookie format invalid")
@@ -224,7 +224,7 @@ func mavisFetch(u, m string) (string, error) {
 	}
 
 	if stash {
-		err = stashRequest(mU, uF, name, data, headers, []string{})
+		err = stashRequest(mU, uF, name, data, headers, cookies)
 	}
 
 	return string(body), err

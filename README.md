@@ -37,7 +37,7 @@ Use "mavis [command] --help" for more information about a command.
 - Prettier output when printing to cli not files
 - Websockts
 - Supporting other formats not just toml (like hugo)
-- Deleting stashed requests
+- ~~Deleting stashed requests~~
 - Stash list specify the project
 - Better docs!
 - Finish the setting to apply jq to data
